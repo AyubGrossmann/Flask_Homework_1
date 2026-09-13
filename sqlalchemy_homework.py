@@ -178,20 +178,21 @@ session.commit()
 
 result = (
     session.query(Category.name, func.count(Product.id))
-    .join(Product)
-    .group_by(Category.name)
+    .outerjoin(Product, Category.id == Product.category_id)
+    .group_by(Category.id, Category.name)
     .all()
 )
 
 for category_name, product_count in result:
     print(f"Категория: {category_name}, Количество товаров: {product_count}")
 
-    # Задание 5: Группировка с фильтрацией
+
+# Задание 5: Группировка с фильтрацией
 
 result = (
     session.query(Category.name, func.count(Product.id))
-    .join(Product)
-    .group_by(Category.name)
+    .outerjoin(Product, Category.id == Product.category_id)
+    .group_by(Category.id, Category.name)
     .having(func.count(Product.id) > 1)
     .all()
 )
